@@ -1,0 +1,44 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% title: read tick labels from the content of a command through a key `(x|y|z)ticklabels from command`
+% type: pgfplots library
+% author: Antoine Lejay
+% date: 2017-07-05
+% usage: \usepgfplotslibrary{ticklabels.command}
+% licence: LLPL
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% It is suitable to write 
+% \newcommand{\myticks}{1,2,3}
+% and then to set 
+% xtick=\myticks as parameter to axis.
+% However, this cannot be done for xticklabels as the content 
+% if the command is considered as the first label.
+% This small library provides a new key `(x|y|z)ticklabels from command` in which 
+% the labels are expanded
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% The macro for generating a list is recreated with a macro to mark the stop.
+% It is adapted from /liststructure/pgfplotsliststructure.code.tex
+\long\def\pgfplotslistnewwithstop#1#2\END@PGF@LIST{%
+    \pgfkeys@spdef\pgfplotslist@loc@TMPa{#2}%
+	\def\pgfplotslist@loc@TMPb{\pgfplotslistnew@{#1}}%
+	\expandafter\pgfplotslist@loc@TMPb\expandafter{\pgfplotslist@loc@TMPa}%
+}
+
+% The code is adapted from pgfplots.code.tex
+% \expandafter is insterted so that #1 is expanded. 
+\pgfkeys{
+	/pgfplots/xticklabels from command/.code={%
+	    \expandafter\pgfplotslistnewwithstop\expandafter\pgfplots@xticklabels#1\END@PGF@LIST%
+		\let\pgfplots@xticklabel=\pgfplots@user@ticklabel@list@x
+	},
+	/pgfplots/yticklabels from command/.code={%
+	    \expandafter\pgfplotslistnewwithstop\expandafter\pgfplots@yticklabels#1\END@PGF@LIST%
+		\let\pgfplots@yticklabel=\pgfplots@user@ticklabel@list@y
+	},
+	/pgfplots/zticklabels from command/.code={%
+	    \expandafter\pgfplotslistnewwithstop\expandafter\pgfplots@zticklabels#1\END@PGF@LIST%
+		\let\pgfplots@zticklabel=\pgfplots@user@ticklabel@list@z
+	},
+    }
+\endinput
+% END 
