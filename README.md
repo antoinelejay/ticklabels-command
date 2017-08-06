@@ -34,3 +34,11 @@ This small library provides a new key `xticklabels from command` in which the la
 ...
 \end{axis}
 ```
+
+## TODO
+
+Add minor ticks
+
+## Note
+
+This is an alpha version.
